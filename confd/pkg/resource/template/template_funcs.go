@@ -75,7 +75,7 @@ func autoToIPv4(nodeName string) string {
 	hashBytes := hash.Sum(nil)
 	ip := hashBytes[:4]
 	ip0Value := int(ip[0])
-	if ip0Value > 225 {
+	if ip0Value > 223 {
 		ip0Value = ip0Value - 33
 	}
 	routerId := strconv.Itoa(ip0Value) + "." +
