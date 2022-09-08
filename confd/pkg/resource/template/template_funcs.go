@@ -37,7 +37,6 @@ func newFuncMap() map[string]interface{} {
 	m["base64Encode"] = Base64Encode
 	m["base64Decode"] = Base64Decode
 	m["hashToIPv4"] = hashToIPv4
-	m["autoToIPv4"] = autoToIPv4
 	return m
 }
 
@@ -57,28 +56,12 @@ func hashToIPv4(nodeName string) string {
 	}
 	hashBytes := hash.Sum(nil)
 	ip := hashBytes[:4]
-	routerId := strconv.Itoa(int(ip[0])) + "." +
-		strconv.Itoa(int(ip[1])) + "." +
-		strconv.Itoa(int(ip[2])) + "." +
-		strconv.Itoa(int(ip[3]))
-	return routerId
-}
-
-// autoToIPv4 hashes the given string and
-// formats the resulting 4 bytes as an IPv4 address with unicast allow ipaddress
-func autoToIPv4(nodeName string) string {
-	hash := sha256.New()
-	_, err := hash.Write([]byte(nodeName))
-	if err != nil {
-		return ""
-	}
-	hashBytes := hash.Sum(nil)
-	ip := hashBytes[:4]
+	//To allow unitcast ip address
 	ip0Value := int(ip[0])
 	if ip0Value > 223 {
-		ip0Value = ip0Value - 33
+		ip0Value = ip0Value - 32
 	}
-	routerId := strconv.Itoa(ip0Value) + "." +
+	routerId := strconv.Itoa(int(ip0Value)) + "." +
 		strconv.Itoa(int(ip[1])) + "." +
 		strconv.Itoa(int(ip[2])) + "." +
 		strconv.Itoa(int(ip[3]))
